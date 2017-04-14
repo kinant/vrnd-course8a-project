@@ -7,6 +7,8 @@ public class Portal : MonoBehaviour {
     public Transform portalIn;
     public Transform portalOut;
     public Material lineMaterial;
+    public Transform ball;
+    public float portalExitForce = 2.0f;
 
     private LineRenderer lineRenderer;
 
@@ -22,6 +24,17 @@ public class Portal : MonoBehaviour {
         // newMaterial.SetColor("_Color", Color.green);
         // lineRenderer.material = newMaterial;
         lineRenderer.material = lineMaterial;
+    }
+
+    public void BallEnteredPortal() {
+        ball.position = portalOut.transform.position;
+
+        // we set the velocity:
+        Rigidbody rb = ball.gameObject.GetComponent<Rigidbody>();
+        if (rb) {
+            // rb.velocity = new Vector3(0f, 0f, rb.velocity.z); 
+            rb.velocity = portalOut.transform.forward * portalExitForce;
+        }
     }
 
     // Update is called once per frame

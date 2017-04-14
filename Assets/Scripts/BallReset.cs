@@ -8,6 +8,8 @@ public class BallReset : MonoBehaviour {
     private Transform m_transform;
     private Rigidbody m_rb;
 
+    public bool isBeingHeld = false;
+
 	// Use this for initialization
 	void Start () {
         m_transform = GetComponent<Transform>();

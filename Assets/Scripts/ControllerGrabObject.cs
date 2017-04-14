@@ -34,7 +34,10 @@ public class ControllerGrabObject : MonoBehaviour
             return;
         }
 
-        GrabObject();
+        if(collidingObject.tag.Equals("Throwable") || collidingObject.tag.Equals("Structure"))
+        {
+            GrabObject();
+        }
     }
 
     private void DidTriggerPressUp(InputEventArgs e) {
@@ -89,11 +92,24 @@ public class ControllerGrabObject : MonoBehaviour
         }
 
         objectInHand.transform.SetParent(transform);
+
+        // this is the ball...set being held flag
+        if (objectInHand.GetComponent<BallReset>())
+        {
+            objectInHand.GetComponent<BallReset>().isBeingHeld = true;
+        }
+
         collidingObject = null;
     }
 
     private void ReleaseObject(Vector3 velocity, Vector3 angularVelocity, bool isKinematic)
     {
+        // this is the ball...set being held flag
+        if (objectInHand.GetComponent<BallReset>())
+        {
+            objectInHand.GetComponent<BallReset>().isBeingHeld = false;
+        }
+
         objectInHand.transform.SetParent(null);
         Rigidbody rb = objectInHand.GetComponent<Rigidbody>();
 
