@@ -11,7 +11,26 @@ public class ControllerGrabObject : MonoBehaviour
     private void Awake()
     {
         m_input_manager = GetComponent<ControllerInputManager>();
-        // trackedObj = GetComponent<SteamVR_TrackedObject>();
+    }
+
+    private void OnEnable()
+    {
+        m_input_manager.TriggerUp += new InputEventHandler(DidTriggerPressUp);
+        m_input_manager.TriggerDown += new InputEventHandler(DidTriggerPressDown);
+    }
+
+    private void OnDisable()
+    {
+        m_input_manager.TriggerUp -= new InputEventHandler(DidTriggerPressUp);
+        m_input_manager.TriggerDown -= new InputEventHandler(DidTriggerPressDown);
+    }
+
+    private void DidTriggerPressDown(InputEventArgs e) {
+        GrabObject();
+    }
+
+    private void DidTriggerPressUp(InputEventArgs e) {
+        ReleaseObject(e.controller.velocity, e.controller.angularVelocity);
     }
 
     private void SetCollidingObject(Collider col)
@@ -62,7 +81,7 @@ public class ControllerGrabObject : MonoBehaviour
         return fx;
     }
 
-    private void ReleaseObject()
+    private void ReleaseObject(Vector3 velocity, Vector3 angularVelocity)
     {
 
         if (GetComponent<FixedJoint>())
@@ -70,30 +89,10 @@ public class ControllerGrabObject : MonoBehaviour
             GetComponent<FixedJoint>().connectedBody = null;
             Destroy(GetComponent<FixedJoint>());
 
-            objectInHand.GetComponent<Rigidbody>().velocity = m_input_manager.controller.velocity;
-            objectInHand.GetComponent<Rigidbody>().angularVelocity = m_input_manager.controller.angularVelocity;
+            objectInHand.GetComponent<Rigidbody>().velocity = velocity;
+            objectInHand.GetComponent<Rigidbody>().angularVelocity = angularVelocity;
         }
 
         objectInHand = null;
-    }
-
-    private void Update()
-    {
-        if (m_input_manager.controller.GetHairTriggerDown())
-        {
-            if (collidingObject)
-            {
-                GrabObject();
-            }
-        }
-
-        if (m_input_manager.controller.GetHairTriggerUp())
-        {
-
-            if (objectInHand)
-            {
-                ReleaseObject();
-            }
-        }
     }
 }

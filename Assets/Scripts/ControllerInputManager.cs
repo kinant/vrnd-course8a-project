@@ -50,10 +50,6 @@ public class ControllerInputManager : MonoBehaviour {
         get { return SteamVR_Controller.Input((int) trackedObj.index); }
     }
 
-    public SteamVR_Controller.Device controller {
-        get { return device; }
-    }
-
     public virtual void OnTriggerUp(InputEventArgs e) {
         if (TriggerUp != null) {
             TriggerUp(e);
