@@ -82,8 +82,16 @@ public class ControllerObjectMenu : MonoBehaviour {
     }
 
     private void SpawnCurrentMenuObject() {
+        // Instantiate the prefab
         GameObject go = Instantiate(objects[currMenuIndex].transform.GetChild(0).gameObject, objects[currMenuIndex].transform.position, objects[currMenuIndex].transform.rotation);
+
+        // Set the tag
         go.tag = "Structure";
+
+        // Check if the prefab has its collider, if so, enable it
+        if (go.GetComponent<Collider>()) {
+            go.GetComponent<Collider>().enabled = true;
+        }
     }
 
     private void MenuNext() {

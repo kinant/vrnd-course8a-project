@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class ControllerGrabObject : MonoBehaviour
 {
+
+    public float throwForce = 1.5f;
+
     private GameObject collidingObject;
     private GameObject objectInHand;
     private ControllerInputManager m_input_manager;
@@ -39,7 +42,15 @@ public class ControllerGrabObject : MonoBehaviour
         {
             return;
         }
-        ReleaseObject(e.controller.velocity, e.controller.angularVelocity);
+
+        // check if the object is throwable or not...
+        if (objectInHand.tag.Equals("Throwable"))
+        {
+            ReleaseObject(e.controller.velocity, e.controller.angularVelocity, false);
+        }
+        else if (objectInHand.tag.Equals("Structure")) {
+            ReleaseObject(Vector3.zero, Vector3.zero, true);
+        }
     }
 
     private void SetCollidingObject(Collider col)
@@ -71,31 +82,26 @@ public class ControllerGrabObject : MonoBehaviour
     private void GrabObject()
     {
         objectInHand = collidingObject;
-        collidingObject = null;
+        Rigidbody rb = objectInHand.GetComponent<Rigidbody>();
 
-        var joint = AddFixedJoint();
-        joint.connectedBody = objectInHand.GetComponent<Rigidbody>();
-    }
-
-    private FixedJoint AddFixedJoint()
-    {
-        FixedJoint fx = gameObject.AddComponent<FixedJoint>();
-        fx.breakForce = 20000;
-        fx.breakTorque = 20000;
-        return fx;
-    }
-
-    private void ReleaseObject(Vector3 velocity, Vector3 angularVelocity)
-    {
-        if (GetComponent<FixedJoint>())
-        {
-            GetComponent<FixedJoint>().connectedBody = null;
-            Destroy(GetComponent<FixedJoint>());
-
-            objectInHand.GetComponent<Rigidbody>().velocity = velocity;
-            objectInHand.GetComponent<Rigidbody>().angularVelocity = angularVelocity;
+        if (rb != null) {
+            rb.isKinematic = true;
         }
 
+        objectInHand.transform.SetParent(transform);
+        collidingObject = null;
+    }
+
+    private void ReleaseObject(Vector3 velocity, Vector3 angularVelocity, bool isKinematic)
+    {
+        objectInHand.transform.SetParent(null);
+        Rigidbody rb = objectInHand.GetComponent<Rigidbody>();
+
+        if (rb != null) {
+            rb.isKinematic = isKinematic;
+            rb.velocity = velocity * throwForce;
+            rb.angularVelocity = angularVelocity;
+        }
         objectInHand = null;
     }
 }
