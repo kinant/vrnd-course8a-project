@@ -3,10 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
+public struct RubeObject {
+    public GameObject menuPlaceholder;
+    public GameObject prefab;
+    public int count;
+}
+
 public class ControllerObjectMenu : MonoBehaviour {
 
     public GameObject objectMenuUI;
-    public List<GameObject> objects;
+    // public List<GameObject> objects;
+    // public ArrayList<GameObject, GameObject, int> objectList;
+    public List<RubeObject> objects;
 
     private ControllerInputManager m_input_manager;
     private int currMenuIndex = 0;
@@ -39,15 +48,15 @@ public class ControllerObjectMenu : MonoBehaviour {
         currMenuIndex = 0;
 
         // we disable all the colliders on the menu objects
-        foreach (GameObject o in objects) {
+        foreach (RubeObject o in objects) {
             // check if we have a portal or not
-            if (o.transform.GetChild(0).gameObject.tag.Equals("Portal"))
+            if (o.menuPlaceholder.transform.GetChild(0).gameObject.tag.Equals("Portal"))
             {
-                TogglePortalColliders(o, false);
+                TogglePortalColliders(o.menuPlaceholder, false);
             }
             else
             {
-                Collider col = o.GetComponentInChildren<Collider>();
+                Collider col = o.menuPlaceholder.GetComponentInChildren<Collider>();
                 if (col != null)
                 {
                     col.enabled = false;
@@ -61,13 +70,17 @@ public class ControllerObjectMenu : MonoBehaviour {
 
     private void TogglePortalColliders(GameObject portal, bool toggle) {
 
+        print("checking parent: " + portal.name);
         Transform portalTransform = portal.transform;
         int childCount = portal.transform.childCount;
+        print("this parent has: " + childCount + " children.");
 
         for (int i = 0; i < childCount; i++) {
             GameObject go = portalTransform.GetChild(i).gameObject;
+            print("checking child: " + go.name);
 
             if (go.GetComponent<Collider>()) {
+                print("this child has a colider!");
                 go.GetComponent<Collider>().enabled = toggle;
             }
 
@@ -109,10 +122,11 @@ public class ControllerObjectMenu : MonoBehaviour {
 
     private void SpawnCurrentMenuObject() {
         // Instantiate the prefab
-        GameObject go = Instantiate(objects[currMenuIndex].transform.GetChild(0).gameObject, objects[currMenuIndex].transform.position, objects[currMenuIndex].transform.rotation);
+        GameObject go = Instantiate(objects[currMenuIndex].prefab, objectMenuUI.transform.position, objectMenuUI.transform.rotation);
 
         if (go.tag.Equals("Portal"))
         {
+            print("spawned a portal!");
             TogglePortalColliders(go, true);
 
         } else if (go.GetComponent<Collider>()) {
@@ -122,7 +136,7 @@ public class ControllerObjectMenu : MonoBehaviour {
 
     private void MenuNext() {
         // we deactivate the current menu object
-        objects[currMenuIndex].SetActive(false);
+        objects[currMenuIndex].menuPlaceholder.SetActive(false);
 
         // we increment the counter
         currMenuIndex++;
@@ -134,12 +148,12 @@ public class ControllerObjectMenu : MonoBehaviour {
         }
 
         // activate the new menu item
-        objects[currMenuIndex].SetActive(true);
+        objects[currMenuIndex].menuPlaceholder.SetActive(true);
     }
 
     private void MenuPrevious() {
         // we deactivate the current menu object
-        objects[currMenuIndex].SetActive(false);
+        objects[currMenuIndex].menuPlaceholder.SetActive(false);
 
         // we decrement the counter
         currMenuIndex--;
@@ -152,6 +166,6 @@ public class ControllerObjectMenu : MonoBehaviour {
         }
 
         // activate the new menu item
-        objects[currMenuIndex].SetActive(true);
+        objects[currMenuIndex].menuPlaceholder.SetActive(true);
     }
 }
