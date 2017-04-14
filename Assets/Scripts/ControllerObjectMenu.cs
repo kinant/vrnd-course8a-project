@@ -40,15 +40,41 @@ public class ControllerObjectMenu : MonoBehaviour {
 
         // we disable all the colliders on the menu objects
         foreach (GameObject o in objects) {
-            Collider col = o.GetComponentInChildren<Collider>();
-
-            if (col != null) {
-                col.enabled = false;
+            // check if we have a portal or not
+            if (o.transform.GetChild(0).gameObject.tag.Equals("Portal"))
+            {
+                TogglePortalColliders(o, false);
+            }
+            else
+            {
+                Collider col = o.GetComponentInChildren<Collider>();
+                if (col != null)
+                {
+                    col.enabled = false;
+                }
             }
         }
 
         // make sure the object menu spawns a little forward of the controller
         objectMenuUI.transform.localPosition = new Vector3(0f, 0f, 0.5f);
+    }
+
+    private void TogglePortalColliders(GameObject portal, bool toggle) {
+
+        Transform portalTransform = portal.transform;
+        int childCount = portal.transform.childCount;
+
+        for (int i = 0; i < childCount; i++) {
+            GameObject go = portalTransform.GetChild(i).gameObject;
+
+            if (go.GetComponent<Collider>()) {
+                go.GetComponent<Collider>().enabled = toggle;
+            }
+
+            if (go.transform.childCount > 0) {
+                TogglePortalColliders(go, toggle);
+            }
+        }
     }
 
     private void HandleTouchDown(InputEventArgs e) {
@@ -85,11 +111,11 @@ public class ControllerObjectMenu : MonoBehaviour {
         // Instantiate the prefab
         GameObject go = Instantiate(objects[currMenuIndex].transform.GetChild(0).gameObject, objects[currMenuIndex].transform.position, objects[currMenuIndex].transform.rotation);
 
-        // Set the tag
-        go.tag = "Structure";
+        if (go.tag.Equals("Portal"))
+        {
+            TogglePortalColliders(go, true);
 
-        // Check if the prefab has its collider, if so, enable it
-        if (go.GetComponent<Collider>()) {
+        } else if (go.GetComponent<Collider>()) {
             go.GetComponent<Collider>().enabled = true;
         }
     }
