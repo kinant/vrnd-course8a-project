@@ -26,10 +26,19 @@ public class ControllerGrabObject : MonoBehaviour
     }
 
     private void DidTriggerPressDown(InputEventArgs e) {
+        if (!collidingObject || objectInHand)
+        {
+            return;
+        }
+
         GrabObject();
     }
 
     private void DidTriggerPressUp(InputEventArgs e) {
+        if (!objectInHand)
+        {
+            return;
+        }
         ReleaseObject(e.controller.velocity, e.controller.angularVelocity);
     }
 
@@ -56,11 +65,6 @@ public class ControllerGrabObject : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (!collidingObject)
-        {
-            return;
-        }
-
         collidingObject = null;
     }
 
@@ -83,7 +87,6 @@ public class ControllerGrabObject : MonoBehaviour
 
     private void ReleaseObject(Vector3 velocity, Vector3 angularVelocity)
     {
-
         if (GetComponent<FixedJoint>())
         {
             GetComponent<FixedJoint>().connectedBody = null;

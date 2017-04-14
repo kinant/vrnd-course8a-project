@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ public class ControllerObjectMenu : MonoBehaviour {
 
     private ControllerInputManager m_input_manager;
     private int currMenuIndex = 0;
+    private bool isMenuActive = false;
 
     private void Awake()
     {
@@ -20,6 +22,7 @@ public class ControllerObjectMenu : MonoBehaviour {
         m_input_manager.TouchPadTouchDown += new InputEventHandler(HandleTouchDown);
         m_input_manager.TouchPadTouchUp += new InputEventHandler(HandleTouchUp);
         m_input_manager.TouchPadPressDown += new InputEventHandler(HandleTouchPress);
+        m_input_manager.TriggerDown += new InputEventHandler(HandleTriggerDown);
     }
 
     private void OnDisable()
@@ -27,6 +30,7 @@ public class ControllerObjectMenu : MonoBehaviour {
         m_input_manager.TouchPadTouchDown -= new InputEventHandler(HandleTouchDown);
         m_input_manager.TouchPadTouchUp -= new InputEventHandler(HandleTouchUp);
         m_input_manager.TouchPadPressDown -= new InputEventHandler(HandleTouchPress);
+        m_input_manager.TriggerDown -= new InputEventHandler(HandleTriggerDown);
     }
 
     private void Start()
@@ -49,10 +53,12 @@ public class ControllerObjectMenu : MonoBehaviour {
 
     private void HandleTouchDown(InputEventArgs e) {
         objectMenuUI.SetActive(true);
+        isMenuActive = true;
     }
 
     private void HandleTouchUp(InputEventArgs e) {
         objectMenuUI.SetActive(false);
+        isMenuActive = false;
     }
 
     private void HandleTouchPress(InputEventArgs e) {
@@ -65,6 +71,19 @@ public class ControllerObjectMenu : MonoBehaviour {
         else if (e.padX < -0.7) {
             MenuPrevious();
         }
+    }
+
+    private void HandleTriggerDown(InputEventArgs e)
+    {
+        if (isMenuActive) {
+            Debug.Log("Should spawn object!");
+            SpawnCurrentMenuObject();
+        }
+    }
+
+    private void SpawnCurrentMenuObject() {
+        GameObject go = Instantiate(objects[currMenuIndex].transform.GetChild(0).gameObject, objects[currMenuIndex].transform.position, objects[currMenuIndex].transform.rotation);
+        go.tag = "Structure";
     }
 
     private void MenuNext() {
