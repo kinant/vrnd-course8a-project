@@ -49,6 +49,8 @@ public class ControllerObjectMenu : MonoBehaviour {
 
         // we disable all the colliders on the menu objects
         foreach (RubeObject o in objects) {
+            ControllerGrabObject.ToggleColliders(o.menuPlaceholder, false);
+            /*
             // check if we have a portal or not
             if (o.menuPlaceholder.transform.GetChild(0).gameObject.tag.Equals("Portal"))
             {
@@ -62,37 +64,22 @@ public class ControllerObjectMenu : MonoBehaviour {
                     col.enabled = false;
                 }
             }
+            */
         }
 
         // make sure the object menu spawns a little forward of the controller
         objectMenuUI.transform.localPosition = new Vector3(0f, 0f, 0.5f);
     }
 
-    private void TogglePortalColliders(GameObject portal, bool toggle) {
-
-        print("checking parent: " + portal.name);
-        Transform portalTransform = portal.transform;
-        int childCount = portal.transform.childCount;
-        print("this parent has: " + childCount + " children.");
-
-        for (int i = 0; i < childCount; i++) {
-            GameObject go = portalTransform.GetChild(i).gameObject;
-            print("checking child: " + go.name);
-
-            if (go.GetComponent<Collider>()) {
-                print("this child has a colider!");
-                go.GetComponent<Collider>().enabled = toggle;
-            }
-
-            if (go.transform.childCount > 0) {
-                TogglePortalColliders(go, toggle);
-            }
-        }
-    }
-
     private void HandleTouchDown(InputEventArgs e) {
-        objectMenuUI.SetActive(true);
-        isMenuActive = true;
+        // we only want to activate the menu when the user is touching the left or right sides of the touchpad
+        print("Touchpad being touched at: (" + e.padX + " ," + e.padY + ").");
+
+        if (e.padX > 0.7 || e.padX < -0.7)
+        {
+            objectMenuUI.SetActive(true);
+            isMenuActive = true;
+        }
     }
 
     private void HandleTouchUp(InputEventArgs e) {
@@ -124,14 +111,17 @@ public class ControllerObjectMenu : MonoBehaviour {
         // Instantiate the prefab
         GameObject go = Instantiate(objects[currMenuIndex].prefab, objectMenuUI.transform.position, objectMenuUI.transform.rotation);
 
+        ControllerGrabObject.ToggleColliders(go, true);
+        /*
         if (go.tag.Equals("Portal"))
         {
             print("spawned a portal!");
-            TogglePortalColliders(go, true);
+            ToggleColliders(go, true);
 
         } else if (go.GetComponent<Collider>()) {
             go.GetComponent<Collider>().enabled = true;
         }
+        */
     }
 
     private void MenuNext() {

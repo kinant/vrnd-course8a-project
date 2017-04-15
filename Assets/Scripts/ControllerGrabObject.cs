@@ -100,6 +100,9 @@ public class ControllerGrabObject : MonoBehaviour
         }
 
         collidingObject = null;
+
+        // toggle colliders off while holding an object
+        ToggleColliders(objectInHand, false);
     }
 
     private void ReleaseObject(Vector3 velocity, Vector3 angularVelocity, bool isKinematic)
@@ -110,6 +113,9 @@ public class ControllerGrabObject : MonoBehaviour
             objectInHand.GetComponent<BallReset>().isBeingHeld = false;
         }
 
+        // turn the colliders back on
+        ToggleColliders(objectInHand, true);
+
         objectInHand.transform.SetParent(null);
         Rigidbody rb = objectInHand.GetComponent<Rigidbody>();
 
@@ -119,5 +125,45 @@ public class ControllerGrabObject : MonoBehaviour
             rb.angularVelocity = angularVelocity;
         }
         objectInHand = null;
+    }
+
+    public static void ToggleColliders(GameObject obj, bool toggle)
+    {
+
+        if (obj.GetComponent<Collider>())
+        {
+            obj.GetComponent<Collider>().enabled = toggle;
+        }
+
+        print("checking parent: " + obj.name);
+        Transform portalTransform = obj.transform;
+        int childCount = obj.transform.childCount;
+
+        // no more children to look for colliders, return
+        if (childCount == 0)
+        {
+            return;
+        }
+
+        print("this parent has: " + childCount + " children.");
+
+        for (int i = 0; i < childCount; i++)
+        {
+            GameObject go = portalTransform.GetChild(i).gameObject;
+            print("checking child: " + go.name);
+
+            if (go.GetComponent<Collider>())
+            {
+                print("this child has a colider!");
+                go.GetComponent<Collider>().enabled = toggle;
+            }
+
+            // toggle colliders in children
+            if (go.transform.childCount > 0)
+            {
+                ToggleColliders(go, toggle);
+            }
+            go = null;
+        }
     }
 }

@@ -148,9 +148,13 @@ public class ControllerInputManager : MonoBehaviour {
         }
         if (device.GetTouchDown(SteamVR_Controller.ButtonMask.Touchpad)) {
             //Debug.Log("Touchpad Touch down!" + contTypeString);
+            Vector2 touch = device.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0);
+
             InputEventArgs args = new InputEventArgs();
             args.controller = this.device;
             args.controllerType = this.controllerType;
+            args.padX = touch.x;
+            args.padY = touch.y;
             OnTouchPadTouchedDown(args);
         }
 
