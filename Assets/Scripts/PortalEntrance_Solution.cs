@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PortalEntrance : MonoBehaviour {
+public class PortalEntrance_Solution : MonoBehaviour {
 
-    private Portal parentScript;
+    public Portal_Solution parentScript;
 
     private void Awake()
     {
         if (parentScript == null)
         {
-            parentScript = GetComponentInParent<Portal>();
+            parentScript = GetComponentInParent<Portal_Solution>();
         }
     }
 
