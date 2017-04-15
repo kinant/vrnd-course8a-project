@@ -24,9 +24,11 @@ public class LevelManager : MonoBehaviour {
     public List<GameObject> stars;
 
     private int currStarCount = 0;
+    private SteamVR_LoadLevel levelLoader;
 
 	// Use this for initialization
 	void Start () {
+        levelLoader = GetComponent<SteamVR_LoadLevel>();
         currStarCount = 0;
 	}
 
@@ -42,6 +44,7 @@ public class LevelManager : MonoBehaviour {
 
     private void Win() {
         print("LEVEL COMPLETE! ALL STARS COLLECTED!");
+        levelLoader.Trigger();
     }
 
     public void ResetLevel() {
