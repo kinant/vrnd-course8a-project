@@ -1,33 +1,33 @@
 fileFormatVersion: 2
-guid: 6de65be3539a76a4381221ea813ef450
-timeCreated: 1492211277
+guid: cb293bfd3ca13f34fb8d82b4614632e5
+timeCreated: 1492220249
 licenseType: Pro
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: Bottom
-    100002: CollisionMesh
+    100002: ColliderMesh
     100004: //RootNode
     100006: InnerShell
     100008: OuterShell
     100010: Top
     400000: Bottom
-    400002: CollisionMesh
+    400002: ColliderMesh
     400004: //RootNode
     400006: InnerShell
     400008: OuterShell
     400010: Top
     2300000: Bottom
-    2300002: CollisionMesh
+    2300002: ColliderMesh
     2300004: InnerShell
     2300006: OuterShell
     2300008: Top
     3300000: Bottom
-    3300002: CollisionMesh
+    3300002: ColliderMesh
     3300004: InnerShell
     3300006: OuterShell
     3300008: Top
-    4300000: CollisionMesh
+    4300000: ColliderMesh
     4300002: InnerShell
     4300004: Bottom
     4300006: Top
