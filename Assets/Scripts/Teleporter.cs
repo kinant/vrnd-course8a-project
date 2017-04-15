@@ -8,6 +8,7 @@ public class Teleporter : MonoBehaviour {
     public float thickness = 0.002f;
     public Transform player;
     public GameObject pointerIndicatorPrefab;
+    public LayerMask layerMask;
 
     private GameObject pointer;
     private GameObject holder;
@@ -62,8 +63,13 @@ public class Teleporter : MonoBehaviour {
 
     private void DeactivateTeleporter(InputEventArgs e)
     {
-        // teleport to the location
-        player.position = pointerIndicator.transform.position;
+        if (isCurrContact)
+        {
+            // teleport to the location
+            player.position = pointerIndicator.transform.position;
+            isCurrContact = false;
+            currContact = null;
+        }
 
         // deactivate
         if (pointer != null)
@@ -132,7 +138,7 @@ public class Teleporter : MonoBehaviour {
 
         Ray raycast = new Ray(m_transform.position, m_transform.forward);
         RaycastHit hit;
-        bool bHit = Physics.Raycast(raycast, out hit);
+        bool bHit = Physics.Raycast(raycast, out hit, 100f, layerMask);
 
         if (bHit)
         {
