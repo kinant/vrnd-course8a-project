@@ -11,7 +11,9 @@ public class Star : MonoBehaviour {
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("BALL HAS HIT STAR");
-        Destroy(gameObject);
+        // Destroy(gameObject);
+        LevelManager.Instance.CollectStar();
+        gameObject.SetActive(false);
     }
 
     // Use this for initialization

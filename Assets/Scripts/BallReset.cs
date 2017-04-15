@@ -24,6 +24,17 @@ public class BallReset : MonoBehaviour {
             m_rb.velocity = Vector3.zero;
             m_rb.angularVelocity = Vector3.zero;
         }
+
+        LevelManager.Instance.ResetLevel();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag.Equals("Goal"))
+        {
+            print("Ball has hit goal!");
+            LevelManager.Instance.CheckWin();
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -31,5 +42,6 @@ public class BallReset : MonoBehaviour {
         if (collision.gameObject.tag.Equals("Ground")) {
             ResetBall();
         }
+        
     }
 }

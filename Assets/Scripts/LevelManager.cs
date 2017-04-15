@@ -4,13 +4,51 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour {
 
+    private static LevelManager _instance;
+
+    public static LevelManager Instance { get { return _instance; } }
+
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
+    }
+
+    public int numberOfStars = 0;
+    public List<GameObject> stars;
+
+    private int currStarCount = 0;
+
 	// Use this for initialization
 	void Start () {
-		
+        currStarCount = 0;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    public void CollectStar() {
+        currStarCount++;
+    }
+
+    public void CheckWin() {
+        if (currStarCount == numberOfStars) {
+            Win();
+        }
+    }
+
+    private void Win() {
+        print("LEVEL COMPLETE! ALL STARS COLLECTED!");
+    }
+
+    public void ResetLevel() {
+        foreach (GameObject star in stars) {
+            star.SetActive(true);
+        }
+
+        currStarCount = 0;
+    }
 }
