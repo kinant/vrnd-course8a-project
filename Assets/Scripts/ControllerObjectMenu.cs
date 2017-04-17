@@ -81,7 +81,7 @@ public class ControllerObjectMenu : MonoBehaviour {
 
     private void HandleTouchDown(InputEventArgs e) {
         // we only want to activate the menu when the user is touching the left or right sides of the touchpad
-        print("Touchpad being touched at: (" + e.padX + " ," + e.padY + ").");
+        // print("Touchpad being touched at: (" + e.padX + " ," + e.padY + ").");
 
         if (e.padX > 0.7 || e.padX < -0.7)
         {
@@ -110,7 +110,7 @@ public class ControllerObjectMenu : MonoBehaviour {
     private void HandleTriggerDown(InputEventArgs e)
     {
         if (isMenuActive) {
-            Debug.Log("Should spawn object!");
+            // Debug.Log("Should spawn object!");
             SpawnCurrentMenuObject();
         }
     }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BallReset : MonoBehaviour {
+public class Ball_Tutorial : MonoBehaviour {
 
     private Vector3 startPosition;
     private Transform m_transform;
@@ -34,7 +34,7 @@ public class BallReset : MonoBehaviour {
             m_rb.angularVelocity = Vector3.zero;
         }
 
-        LevelManager.Instance.ResetLevel();
+        // LevelManager.Instance.ResetLevel();
 
         isInvalid = false;
     }
@@ -50,13 +50,30 @@ public class BallReset : MonoBehaviour {
 
         if (tag.Equals("Goal"))
         {
-            // print("Ball has hit goal!");
-            LevelManager.Instance.CheckWin();
-        }
-        if(tag.Equals("Star"))
-        {
-            LevelManager.Instance.CollectStar();
-            Destroy(other.gameObject);
+            print("Ball has hit goal!");
+
+            print("Current state is: " + TutorialManager.Instance.CurrentState);
+
+            switch (TutorialManager.Instance.CurrentState) {
+                case TutorialManager.TutorialState.Grabbing:
+                    TutorialManager.Instance.SetState(TutorialManager.TutorialState.Spawning);
+                    break;
+                case TutorialManager.TutorialState.Spawning:
+                    TutorialManager.Instance.SetState(TutorialManager.TutorialState.Spawn_WoodPlank);
+                    break;
+                case TutorialManager.TutorialState.Spawn_WoodPlank:
+                    TutorialManager.Instance.SetState(TutorialManager.TutorialState.Spawn_Funnel);
+                    break;
+                case TutorialManager.TutorialState.Spawn_Funnel:
+                    TutorialManager.Instance.SetState(TutorialManager.TutorialState.Spawn_Portal);
+                    break;
+                case TutorialManager.TutorialState.Spawn_Portal:
+                    TutorialManager.Instance.SetState(TutorialManager.TutorialState.Complete);
+                    GetComponent<SteamVR_LoadLevel>().Trigger();
+                    break;
+                default:
+                    break;
+            }
         }
     }
 

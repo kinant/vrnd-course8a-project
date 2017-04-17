@@ -8,14 +8,6 @@ public class Star : MonoBehaviour {
 
     private Transform m_transform;
 
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("BALL HAS HIT STAR");
-        // Destroy(gameObject);
-        LevelManager.Instance.CollectStar();
-        gameObject.SetActive(false);
-    }
-
     // Use this for initialization
     void Start () {
         m_transform = GetComponent<Transform>();
