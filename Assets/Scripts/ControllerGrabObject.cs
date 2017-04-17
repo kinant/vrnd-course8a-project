@@ -34,7 +34,7 @@ public class ControllerGrabObject : MonoBehaviour
             return;
         }
 
-        if(collidingObject.tag.Equals("Throwable") || collidingObject.tag.Equals("Structure"))
+        if(collidingObject.tag.Equals("Throwable") || collidingObject.tag.Equals("Structure") || collidingObject.tag.Equals("Funnel"))
         {
             GrabObject();
         }
@@ -51,7 +51,7 @@ public class ControllerGrabObject : MonoBehaviour
         {
             ReleaseObject(e.controller.velocity, e.controller.angularVelocity, false);
         }
-        else if (objectInHand.tag.Equals("Structure")) {
+        else if (objectInHand.tag.Equals("Structure") || objectInHand.tag.Equals("Funnel")) {
             ReleaseObject(Vector3.zero, Vector3.zero, true);
         }
     }
@@ -69,22 +69,32 @@ public class ControllerGrabObject : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
+        print("hit trigger: " + other.gameObject.tag + ", " + other.gameObject.name);
         SetCollidingObject(other);
     }
 
     public void OnTriggerStay(Collider other)
     {
+        print("stay trigger: " + other.gameObject.tag + ", " + other.gameObject.name);
         SetCollidingObject(other);
     }
 
     private void OnTriggerExit(Collider other)
     {
+        print("exit trigger: " + other.gameObject.tag + ", " + other.gameObject.name);
         collidingObject = null;
     }
 
     private void GrabObject()
     {
         objectInHand = collidingObject;
+
+        if (objectInHand.tag.Equals("Funnel")) {
+            objectInHand = objectInHand.transform.parent.gameObject;
+        }
+
+        print("GRABBING OBJECT: " + objectInHand.name);
+
         Rigidbody rb = objectInHand.GetComponent<Rigidbody>();
 
         if (rb != null) {

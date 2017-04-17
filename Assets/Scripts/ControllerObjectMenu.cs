@@ -2,11 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [Serializable]
-public struct RubeObject {
+public class RubeObject {
     public GameObject menuPlaceholder;
     public GameObject prefab;
+    public string name;
     public int count;
 }
 
@@ -16,6 +18,9 @@ public class ControllerObjectMenu : MonoBehaviour {
     // public List<GameObject> objects;
     // public ArrayList<GameObject, GameObject, int> objectList;
     public List<RubeObject> objects;
+
+    public Text nameText;
+    public Text countText;
 
     private ControllerInputManager m_input_manager;
     private int currMenuIndex = 0;
@@ -67,6 +72,9 @@ public class ControllerObjectMenu : MonoBehaviour {
             */
         }
 
+        // set the text
+        SetUIText(objects[currMenuIndex].name, objects[currMenuIndex].count);
+
         // make sure the object menu spawns a little forward of the controller
         objectMenuUI.transform.localPosition = new Vector3(0f, 0f, 0.5f);
     }
@@ -108,20 +116,32 @@ public class ControllerObjectMenu : MonoBehaviour {
     }
 
     private void SpawnCurrentMenuObject() {
-        // Instantiate the prefab
-        GameObject go = Instantiate(objects[currMenuIndex].prefab, objectMenuUI.transform.position, objectMenuUI.transform.rotation);
 
-        ControllerGrabObject.ToggleColliders(go, true);
-        /*
-        if (go.tag.Equals("Portal"))
+        // check that we can spawn specific item
+        if (objects[currMenuIndex].count > 0)
         {
-            print("spawned a portal!");
-            ToggleColliders(go, true);
+            // Instantiate the prefab
+            GameObject go = Instantiate(objects[currMenuIndex].prefab, objectMenuUI.transform.position, objectMenuUI.transform.rotation);
 
-        } else if (go.GetComponent<Collider>()) {
-            go.GetComponent<Collider>().enabled = true;
+            ControllerGrabObject.ToggleColliders(go, true);
+
+            // decrement the count
+            objects[currMenuIndex].count--;
+
+            // set the text
+            SetUIText(objects[currMenuIndex].name, objects[currMenuIndex].count);
+
+            /*
+            if (go.tag.Equals("Portal"))
+            {
+                print("spawned a portal!");
+                ToggleColliders(go, true);
+
+            } else if (go.GetComponent<Collider>()) {
+                go.GetComponent<Collider>().enabled = true;
+            }
+            */
         }
-        */
     }
 
     private void MenuNext() {
@@ -139,6 +159,9 @@ public class ControllerObjectMenu : MonoBehaviour {
 
         // activate the new menu item
         objects[currMenuIndex].menuPlaceholder.SetActive(true);
+
+        // set the text
+        SetUIText(objects[currMenuIndex].name, objects[currMenuIndex].count);
     }
 
     private void MenuPrevious() {
@@ -157,5 +180,13 @@ public class ControllerObjectMenu : MonoBehaviour {
 
         // activate the new menu item
         objects[currMenuIndex].menuPlaceholder.SetActive(true);
+
+        // set text
+        SetUIText(objects[currMenuIndex].name, objects[currMenuIndex].count);
+    }
+
+    private void SetUIText(string name, int count) {
+        nameText.text = name;
+        countText.text = count.ToString();
     }
 }

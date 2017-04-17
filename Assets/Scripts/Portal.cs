@@ -26,13 +26,13 @@ public class Portal : MonoBehaviour {
         m_transform.rotation = Quaternion.Euler(0f, -90f, 0f);
 
         // create the portals
-        GameObject entrance = Instantiate(portalEntrancePrefab);
-        entrance.transform.SetParent(m_transform);
+        GameObject entrance = Instantiate(portalEntrancePrefab, transform);
+        // entrance.transform.SetParent(transform);
         entrance.transform.localPosition = new Vector3(0f, 0f, 0.4f);
         entrance.transform.localRotation = Quaternion.identity;
 
-        GameObject exit = Instantiate(portalExitPrefab);
-        exit.transform.SetParent(m_transform);
+        GameObject exit = Instantiate(portalExitPrefab, transform);
+        // exit.transform.SetParent(transform);
         exit.transform.localPosition = new Vector3(0f, 0f, -0.4f);
         exit.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
 
