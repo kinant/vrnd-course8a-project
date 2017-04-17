@@ -35,7 +35,10 @@ public class TutorialManager : MonoBehaviour {
     public PlayerElevator elevatorScript;
     public ControllerObjectMenu menuScript;
 
+    public AudioClip correctSFX;
+
     private Vector3 playerStartPos;
+    private AudioSource audioSource;
 
     public enum TutorialState {
         Teleport, Elevate, Grabbing, Spawning, Spawn_WoodPlank, Spawn_Funnel, Spawn_Portal, Complete
@@ -57,10 +60,15 @@ public class TutorialManager : MonoBehaviour {
 
         // set player starting position
         playerStartPos = player.transform.position;
+
+        // get audiosource component
+        audioSource = GetComponent<AudioSource>();
 	}
 
     public void SetState(TutorialState newState) {
         currTutState = newState;
+
+        audioSource.PlayOneShot(correctSFX);
 
         switch (currTutState)
         {
