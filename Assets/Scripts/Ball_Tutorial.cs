@@ -40,4 +40,13 @@ public class Ball_Tutorial : Ball {
             }
         }
     }
+
+    protected override void OnCollisionEnter(Collision collision)
+    {
+        base.OnCollisionEnter(collision);
+        if (collision.gameObject.tag.Equals("Ground"))
+        {
+            LevelManager.Instance.PlayIncorrectSound();
+        }
+    }
 }

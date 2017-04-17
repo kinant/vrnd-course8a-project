@@ -45,7 +45,9 @@ public class LevelManager : MonoBehaviour {
         currStarCount = 0;
         numberOfStars = stars.Count;
         didWin = false;
-	}
+
+
+    }
 
     public void CollectStar() {
         audioSource.PlayOneShot(starCollectSFX);
@@ -73,7 +75,7 @@ public class LevelManager : MonoBehaviour {
     }
 
     public void ResetLevel() {
-        if (!didWin && !levelIsTutorial)
+        if (!didWin)
         {
             audioSource.PlayOneShot(incorrectSFX);
         }
@@ -86,7 +88,7 @@ public class LevelManager : MonoBehaviour {
     }
 
     public void PlayIncorrectSound() {
-        if (!didWin && !levelIsTutorial)
+        if (!didWin)
         {
             audioSource.PlayOneShot(incorrectSFX);
         }

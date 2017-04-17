@@ -84,7 +84,7 @@ public class Ball : MonoBehaviour {
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    protected virtual void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag.Equals("Ground")) {
             ResetBall();
