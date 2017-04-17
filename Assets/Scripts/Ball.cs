@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour {
 
-    private Vector3 startPosition;
-    private Transform m_transform;
-    private Rigidbody m_rb;
+    protected Vector3 startPosition;
+    protected Transform m_transform;
+    protected Rigidbody m_rb;
 
-    private MeshRenderer m_renderer;
-    private Color originalColor;
+    protected MeshRenderer m_renderer;
+    protected Color originalColor;
 
     public bool isBeingHeld = false;
 
-    private bool isInvalid = false;
+    protected bool isInvalid = false;
 
 	// Use this for initialization
 	void Start () {
@@ -24,7 +24,7 @@ public class Ball : MonoBehaviour {
         originalColor = m_renderer.material.color;
 	}
 
-    void ResetBall() {
+    protected virtual void ResetBall() {
         m_transform.position = startPosition;
 
         m_renderer.material.color = originalColor;
@@ -39,7 +39,7 @@ public class Ball : MonoBehaviour {
         isInvalid = false;
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
 
         if (isInvalid) {
@@ -61,7 +61,7 @@ public class Ball : MonoBehaviour {
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    protected void OnTriggerExit(Collider other)
     {
         print("ball trigger exit: " + other.gameObject.tag);
         print("ball trigger exit: " + other.gameObject.name);

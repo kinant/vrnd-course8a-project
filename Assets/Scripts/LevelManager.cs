@@ -30,6 +30,7 @@ public class LevelManager : MonoBehaviour {
     public AudioClip correctSFX;
     public AudioClip incorrectSFX;
     public AudioClip starCollectSFX;
+    public bool levelIsTutorial = false;
 
     private int currStarCount = 0;
     private SteamVR_LoadLevel levelLoader;
@@ -72,7 +73,7 @@ public class LevelManager : MonoBehaviour {
     }
 
     public void ResetLevel() {
-        if (!didWin)
+        if (!didWin && !levelIsTutorial)
         {
             audioSource.PlayOneShot(incorrectSFX);
         }
@@ -85,7 +86,7 @@ public class LevelManager : MonoBehaviour {
     }
 
     public void PlayIncorrectSound() {
-        if (!didWin)
+        if (!didWin && !levelIsTutorial)
         {
             audioSource.PlayOneShot(incorrectSFX);
         }
