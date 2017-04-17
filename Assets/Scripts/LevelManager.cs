@@ -10,6 +10,8 @@ public class LevelManager : MonoBehaviour {
 
     private void Awake()
     {
+        _instance = this;
+        /*
         if (_instance != null && _instance != this)
         {
             Destroy(this.gameObject);
@@ -18,9 +20,12 @@ public class LevelManager : MonoBehaviour {
         {
             _instance = this;
         }
+        */
+        currStarCount = 0;
+
     }
 
-    public int numberOfStars = 0;
+    private int numberOfStars = 0;
     public List<GameObject> stars;
     public AudioClip correctSFX;
     public AudioClip incorrectSFX;
@@ -30,11 +35,15 @@ public class LevelManager : MonoBehaviour {
     private SteamVR_LoadLevel levelLoader;
     private AudioSource audioSource;
 
+    private bool didWin = false;
+
 	// Use this for initialization
 	void Start () {
         levelLoader = GetComponent<SteamVR_LoadLevel>();
         audioSource = GetComponent<AudioSource>();
         currStarCount = 0;
+        numberOfStars = stars.Count;
+        didWin = false;
 	}
 
     public void CollectStar() {
@@ -43,8 +52,12 @@ public class LevelManager : MonoBehaviour {
     }
 
     public void CheckWin() {
+
+        print("CHECKING IF WON! curr: " + currStarCount + ", num: " + numberOfStars);
+
         if (currStarCount == numberOfStars)
         {
+            didWin = true;
             Win();
         }
         else {
@@ -59,7 +72,10 @@ public class LevelManager : MonoBehaviour {
     }
 
     public void ResetLevel() {
-        audioSource.PlayOneShot(incorrectSFX);
+        if (!didWin)
+        {
+            audioSource.PlayOneShot(incorrectSFX);
+        }
 
         foreach (GameObject star in stars) {
             star.SetActive(true);
@@ -69,7 +85,10 @@ public class LevelManager : MonoBehaviour {
     }
 
     public void PlayIncorrectSound() {
-        audioSource.PlayOneShot(incorrectSFX);
+        if (!didWin)
+        {
+            audioSource.PlayOneShot(incorrectSFX);
+        }
     }
 
 }

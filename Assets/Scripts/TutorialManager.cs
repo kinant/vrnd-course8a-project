@@ -37,6 +37,7 @@ public class TutorialManager : MonoBehaviour {
 
     public AudioClip correctSFX;
 
+    private SteamVR_LoadLevel levelLoader;
     private Vector3 playerStartPos;
     private AudioSource audioSource;
 
@@ -60,6 +61,9 @@ public class TutorialManager : MonoBehaviour {
 
         // set player starting position
         playerStartPos = player.transform.position;
+
+        // level loader
+        levelLoader = GetComponent<SteamVR_LoadLevel>();
 
         // get audiosource component
         audioSource = GetComponent<AudioSource>();
@@ -111,6 +115,7 @@ public class TutorialManager : MonoBehaviour {
                 break;
             case TutorialState.Complete:
                 Debug.Log("Tutorial complete!");
+                levelLoader.Trigger();
                 break;
             default:
                 break;

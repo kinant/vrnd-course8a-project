@@ -111,8 +111,11 @@ public class ControllerGrabObject : MonoBehaviour
 
         collidingObject = null;
 
-        // toggle colliders off while holding an object
-        ToggleColliders(objectInHand, false);
+        if (!objectInHand.tag.Equals("Throwable"))
+        {
+            // toggle colliders off while holding an object
+            ToggleColliders(objectInHand, false);
+        }
     }
 
     private void ReleaseObject(Vector3 velocity, Vector3 angularVelocity, bool isKinematic)

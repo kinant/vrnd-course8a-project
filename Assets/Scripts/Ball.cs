@@ -8,7 +8,7 @@ public class Ball : MonoBehaviour {
     private Transform m_transform;
     private Rigidbody m_rb;
 
-    private MeshRenderer renderer;
+    private MeshRenderer m_renderer;
     private Color originalColor;
 
     public bool isBeingHeld = false;
@@ -20,14 +20,14 @@ public class Ball : MonoBehaviour {
         m_transform = GetComponent<Transform>();
         m_rb = GetComponent<Rigidbody>();
         startPosition = m_transform.position;
-        renderer = GetComponent<MeshRenderer>();
-        originalColor = renderer.material.color;
+        m_renderer = GetComponent<MeshRenderer>();
+        originalColor = m_renderer.material.color;
 	}
 
     void ResetBall() {
         m_transform.position = startPosition;
 
-        renderer.material.color = originalColor;
+        m_renderer.material.color = originalColor;
 
         if (m_rb != null) {
             m_rb.velocity = Vector3.zero;
@@ -50,23 +50,32 @@ public class Ball : MonoBehaviour {
 
         if (tag.Equals("Goal"))
         {
-            // print("Ball has hit goal!");
+            print("Ball has hit goal!");
             LevelManager.Instance.CheckWin();
         }
         if(tag.Equals("Star"))
         {
             LevelManager.Instance.CollectStar();
-            Destroy(other.gameObject);
+            other.gameObject.SetActive(false);
+            // Destroy(other.gameObject);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
+        print("ball trigger exit: " + other.gameObject.tag);
+        print("ball trigger exit: " + other.gameObject.name);
+
         if (other.gameObject.tag.Equals("PlayArea")) {
+
+            print("player has left the play area! held: " + isBeingHeld);
+
             if (isBeingHeld)
             {
+                print("player has left playing area holding the ball!");
+
                 // Player has exited the play area with the ball, invalidate the ball
-                renderer.material.color = Color.black;
+                m_renderer.material.color = Color.black;
                 isInvalid = true;
 
                 // play sound

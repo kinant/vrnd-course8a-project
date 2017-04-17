@@ -69,7 +69,6 @@ public class Ball_Tutorial : MonoBehaviour {
                     break;
                 case TutorialManager.TutorialState.Spawn_Portal:
                     TutorialManager.Instance.SetState(TutorialManager.TutorialState.Complete);
-                    GetComponent<SteamVR_LoadLevel>().Trigger();
                     break;
                 default:
                     break;
