@@ -14,13 +14,8 @@ public class PortalEntrance : MonoBehaviour {
         }
     }
 
-    private void Start()
-    {
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Ball has entered!");
         // this is the ball...set being held flag
         if (other.gameObject.GetComponent<Ball>())
         {

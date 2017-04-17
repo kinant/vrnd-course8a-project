@@ -36,13 +36,7 @@ public class Portal : MonoBehaviour {
 
         portalIn = entrance.transform;
         portalOut = exit.transform;
-    }
 
-    private void Start()
-    {
-        // Find the ball
-        ball = GameObject.Find("Ball").transform;
-        
         // create the line
         lineRenderer = this.gameObject.AddComponent<LineRenderer>();
         lineRenderer.positionCount = 2;
@@ -54,6 +48,11 @@ public class Portal : MonoBehaviour {
         lineRenderer.SetPosition(1, portalOut.position);
     }
 
+    private void Start()
+    {
+        // Find the ball
+        ball = GameObject.Find("Ball").transform;
+    }
 
     public void BallEnteredPortal() {
         ball.position = portalOut.transform.position;

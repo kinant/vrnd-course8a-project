@@ -2,7 +2,14 @@
 
 public class Ball_Tutorial : Ball {
 
-    protected override void OnTriggerEnter(Collider other)
+    protected override void ResetBall()
+    {
+        base.ResetBall();
+
+        TutorialManager.Instance.PlayIncorrectSound();
+    }
+
+    private void OnTriggerEnter(Collider other)
     {
         if (isInvalid) {
             // play incorrect sound...
@@ -14,8 +21,6 @@ public class Ball_Tutorial : Ball {
 
         if (tag.Equals("Goal"))
         {
-            m_transform.position = startPosition;
-
             switch (TutorialManager.Instance.CurrentState) {
                 case TutorialManager.TutorialState.Grabbing:
                     TutorialManager.Instance.SetState(TutorialManager.TutorialState.Spawning);
@@ -38,12 +43,13 @@ public class Ball_Tutorial : Ball {
         }
     }
 
-    protected override void OnCollisionEnter(Collision collision)
+    protected override void OnTriggerExit(Collider other)
     {
-        if (collision.gameObject.tag.Equals("Ground"))
+        base.OnTriggerExit(other);
+
+        if (other.gameObject.tag.Equals("PlayArea"))
         {
             TutorialManager.Instance.PlayIncorrectSound();
-            m_transform.position = startPosition;
         }
     }
 }

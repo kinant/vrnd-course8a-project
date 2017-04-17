@@ -9,7 +9,6 @@ public class Ball : MonoBehaviour {
     protected MeshRenderer m_renderer;
     protected Color originalColor;
 
-    public LevelManager levelManager;
     public bool isBeingHeld = false;
 
     protected bool isInvalid = false;
@@ -32,32 +31,10 @@ public class Ball : MonoBehaviour {
             m_rb.velocity = Vector3.zero;
             m_rb.angularVelocity = Vector3.zero;
         }
-
-        levelManager.ResetLevel();
-
         isInvalid = false;
     }
 
-    protected virtual void OnTriggerEnter(Collider other)
-    {
-        if (isInvalid) {
-            return;
-        }
-
-        string tag = other.gameObject.tag;
-
-        if (tag.Equals("Goal"))
-        {
-            levelManager.CheckWin();
-        }
-        if(tag.Equals("Star"))
-        {
-            levelManager.CollectStar();
-            other.gameObject.SetActive(false);
-        }
-    }
-
-    protected void OnTriggerExit(Collider other)
+    protected virtual void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag.Equals("PlayArea")) {
             if (isBeingHeld)
@@ -65,9 +42,6 @@ public class Ball : MonoBehaviour {
                 // Player has exited the play area with the ball, invalidate the ball
                 m_renderer.material.color = Color.black;
                 isInvalid = true;
-
-                // play sound
-                levelManager.PlayIncorrectSound();
             }
         }
     }
