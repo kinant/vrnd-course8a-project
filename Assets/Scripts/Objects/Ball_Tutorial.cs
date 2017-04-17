@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Ball_Tutorial : Ball {
 
@@ -8,7 +6,7 @@ public class Ball_Tutorial : Ball {
     {
         if (isInvalid) {
             // play incorrect sound...
-
+            TutorialManager.Instance.PlayIncorrectSound();
             return;
         }
 

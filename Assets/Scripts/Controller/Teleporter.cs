@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Teleporter : MonoBehaviour {
 
@@ -52,7 +50,6 @@ public class Teleporter : MonoBehaviour {
             return;
         }
 
-        Debug.Log("should activate teleporter!");
         // activate
         if (pointer != null)
         {
@@ -158,17 +155,8 @@ public class Teleporter : MonoBehaviour {
             // handle new hit...
             if (currContact == null || (currContact != hitTransform))
             {
-
-                if (currContact != null)
-                {
-                    // OnPointerOut();
-                }
-
                 currContact = hitTransform;
                 isCurrContact = true;
-
-                // responder = currContact.gameObject.GetComponent(typeof(IPointerResponder)) as IPointerResponder;
-                // OnPointerIn();
                 EnablePointerIndicator();
             }
 

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Ball : MonoBehaviour {
 
@@ -64,8 +62,6 @@ public class Ball : MonoBehaviour {
         if (other.gameObject.tag.Equals("PlayArea")) {
             if (isBeingHeld)
             {
-                print("player has left playing area holding the ball!");
-
                 // Player has exited the play area with the ball, invalidate the ball
                 m_renderer.material.color = Color.black;
                 isInvalid = true;

@@ -69,19 +69,16 @@ public class ControllerGrabObject : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        // print("hit trigger: " + other.gameObject.tag + ", " + other.gameObject.name);
         SetCollidingObject(other);
     }
 
     public void OnTriggerStay(Collider other)
     {
-        // print("stay trigger: " + other.gameObject.tag + ", " + other.gameObject.name);
         SetCollidingObject(other);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        // print("exit trigger: " + other.gameObject.tag + ", " + other.gameObject.name);
         collidingObject = null;
     }
 
@@ -92,8 +89,6 @@ public class ControllerGrabObject : MonoBehaviour
         if (objectInHand.tag.Equals("Funnel")) {
             objectInHand = objectInHand.transform.parent.gameObject;
         }
-
-        // print("GRABBING OBJECT: " + objectInHand.name);
 
         Rigidbody rb = objectInHand.GetComponent<Rigidbody>();
 
@@ -148,7 +143,6 @@ public class ControllerGrabObject : MonoBehaviour
             obj.GetComponent<Collider>().enabled = toggle;
         }
 
-        // print("checking parent: " + obj.name);
         Transform portalTransform = obj.transform;
         int childCount = obj.transform.childCount;
 
@@ -158,16 +152,12 @@ public class ControllerGrabObject : MonoBehaviour
             return;
         }
 
-        // print("this parent has: " + childCount + " children.");
-
         for (int i = 0; i < childCount; i++)
         {
             GameObject go = portalTransform.GetChild(i).gameObject;
-            // print("checking child: " + go.name);
 
             if (go.GetComponent<Collider>())
             {
-                print("this child has a colider!");
                 go.GetComponent<Collider>().enabled = toggle;
             }
 

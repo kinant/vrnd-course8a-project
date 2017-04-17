@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,8 +14,6 @@ public class RubeObject {
 public class ControllerObjectMenu : MonoBehaviour {
 
     public GameObject objectMenuUI;
-    // public List<GameObject> objects;
-    // public ArrayList<GameObject, GameObject, int> objectList;
     public List<RubeObject> objects;
 
     public Text nameText;
@@ -55,21 +52,6 @@ public class ControllerObjectMenu : MonoBehaviour {
         // we disable all the colliders on the menu objects
         foreach (RubeObject o in objects) {
             ControllerGrabObject.ToggleColliders(o.menuPlaceholder, false);
-            /*
-            // check if we have a portal or not
-            if (o.menuPlaceholder.transform.GetChild(0).gameObject.tag.Equals("Portal"))
-            {
-                TogglePortalColliders(o.menuPlaceholder, false);
-            }
-            else
-            {
-                Collider col = o.menuPlaceholder.GetComponentInChildren<Collider>();
-                if (col != null)
-                {
-                    col.enabled = false;
-                }
-            }
-            */
         }
 
         // set the text
@@ -87,7 +69,6 @@ public class ControllerObjectMenu : MonoBehaviour {
         }
 
         // we only want to activate the menu when the user is touching the left or right sides of the touchpad
-
         if (e.padX > 0.7 || e.padX < -0.7)
         {
             objectMenuUI.SetActive(true);
@@ -132,7 +113,6 @@ public class ControllerObjectMenu : MonoBehaviour {
         }
 
         if (isMenuActive) {
-            // Debug.Log("Should spawn object!");
             SpawnCurrentMenuObject();
         }
     }
@@ -152,17 +132,6 @@ public class ControllerObjectMenu : MonoBehaviour {
 
             // set the text
             SetUIText(objects[currMenuIndex].name, objects[currMenuIndex].count);
-
-            /*
-            if (go.tag.Equals("Portal"))
-            {
-                print("spawned a portal!");
-                ToggleColliders(go, true);
-
-            } else if (go.GetComponent<Collider>()) {
-                go.GetComponent<Collider>().enabled = true;
-            }
-            */
         }
     }
 

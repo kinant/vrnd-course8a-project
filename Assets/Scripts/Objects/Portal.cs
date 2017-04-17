@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Portal : MonoBehaviour {
 
@@ -10,13 +8,13 @@ public class Portal : MonoBehaviour {
     public Transform ball;
     public float portalExitForce = 2.0f;
 
-    private Transform portalIn;
-    private Transform portalOut;
+    protected Transform portalIn;
+    protected Transform portalOut;
 
-    private Transform m_transform;
-    private LineRenderer lineRenderer;
+    protected Transform m_transform;
+    protected LineRenderer lineRenderer;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         // We create the child game objects, which are the two portal gates
         // We do this in code because it fixes a lot of bugs, and it allows
@@ -63,7 +61,6 @@ public class Portal : MonoBehaviour {
         // we set the velocity:
         Rigidbody rb = ball.gameObject.GetComponent<Rigidbody>();
         if (rb) {
-            // rb.velocity = new Vector3(0f, 0f, rb.velocity.z); 
             rb.velocity = portalOut.transform.forward * portalExitForce;
         }
     }
