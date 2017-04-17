@@ -13,19 +13,19 @@ public class ControllerGrabObject : MonoBehaviour
 
     private void Awake()
     {
-        m_input_manager = GetComponent<ControllerInputManager>();
+        m_input_manager = GetComponentInParent<ControllerInputManager>();
     }
 
     private void OnEnable()
     {
-        m_input_manager.TriggerUp += new InputEventHandler(DidTriggerPressUp);
-        m_input_manager.TriggerDown += new InputEventHandler(DidTriggerPressDown);
+        m_input_manager.TriggerPressed += new InputEventHandler(DidTriggerPressUp);
+        m_input_manager.TriggerUnpressed += new InputEventHandler(DidTriggerPressDown);
     }
 
     private void OnDisable()
     {
-        m_input_manager.TriggerUp -= new InputEventHandler(DidTriggerPressUp);
-        m_input_manager.TriggerDown -= new InputEventHandler(DidTriggerPressDown);
+        m_input_manager.TriggerPressed -= new InputEventHandler(DidTriggerPressUp);
+        m_input_manager.TriggerUnpressed -= new InputEventHandler(DidTriggerPressDown);
     }
 
     private void DidTriggerPressDown(InputEventArgs e) {

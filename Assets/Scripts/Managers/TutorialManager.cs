@@ -36,6 +36,7 @@ public class TutorialManager : MonoBehaviour {
     public ControllerObjectMenu menuScript;
 
     public AudioClip correctSFX;
+    public AudioClip incorrectSFX;
 
     private SteamVR_LoadLevel levelLoader;
     private Vector3 playerStartPos;
@@ -78,9 +79,6 @@ public class TutorialManager : MonoBehaviour {
         {
             case TutorialState.Elevate:
                 elevatorScript.enabled = true;
-                // Tutorial1_Stage.SetActive(false);
-                // Tutorial2_Stage.SetActive(true);
-                // player.transform.position = playerStartPos;
                 break;
             case TutorialState.Grabbing:
                 Tutorial1_Stage.SetActive(false);
@@ -114,21 +112,19 @@ public class TutorialManager : MonoBehaviour {
                 menuScript.objects[3].count = 1;
                 break;
             case TutorialState.Complete:
-                Debug.Log("Tutorial complete!");
                 levelLoader.Trigger();
                 break;
             default:
                 break;
         }
-
     }
 
     public TutorialState CurrentState {
         get { return currTutState; }
     }
 
-    // Update is called once per frame
-    void Update() {
-
+    public void PlayIncorrectSound()
+    {
+        audioSource.PlayOneShot(incorrectSFX);
     }
 }

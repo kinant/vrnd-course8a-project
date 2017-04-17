@@ -11,6 +11,7 @@ public class Ball : MonoBehaviour {
     protected MeshRenderer m_renderer;
     protected Color originalColor;
 
+    public LevelManager levelManager;
     public bool isBeingHeld = false;
 
     protected bool isInvalid = false;
@@ -34,14 +35,13 @@ public class Ball : MonoBehaviour {
             m_rb.angularVelocity = Vector3.zero;
         }
 
-        LevelManager.Instance.ResetLevel();
+        levelManager.ResetLevel();
 
         isInvalid = false;
     }
 
     protected virtual void OnTriggerEnter(Collider other)
     {
-
         if (isInvalid) {
             return;
         }
@@ -50,26 +50,18 @@ public class Ball : MonoBehaviour {
 
         if (tag.Equals("Goal"))
         {
-            print("Ball has hit goal!");
-            LevelManager.Instance.CheckWin();
+            levelManager.CheckWin();
         }
         if(tag.Equals("Star"))
         {
-            LevelManager.Instance.CollectStar();
+            levelManager.CollectStar();
             other.gameObject.SetActive(false);
-            // Destroy(other.gameObject);
         }
     }
 
     protected void OnTriggerExit(Collider other)
     {
-        print("ball trigger exit: " + other.gameObject.tag);
-        print("ball trigger exit: " + other.gameObject.name);
-
         if (other.gameObject.tag.Equals("PlayArea")) {
-
-            print("player has left the play area! held: " + isBeingHeld);
-
             if (isBeingHeld)
             {
                 print("player has left playing area holding the ball!");
@@ -79,7 +71,7 @@ public class Ball : MonoBehaviour {
                 isInvalid = true;
 
                 // play sound
-                LevelManager.Instance.PlayIncorrectSound();
+                levelManager.PlayIncorrectSound();
             }
         }
     }
@@ -89,6 +81,5 @@ public class Ball : MonoBehaviour {
         if (collision.gameObject.tag.Equals("Ground")) {
             ResetBall();
         }
-        
     }
 }

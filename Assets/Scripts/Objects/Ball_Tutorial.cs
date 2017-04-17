@@ -6,8 +6,9 @@ public class Ball_Tutorial : Ball {
 
     protected override void OnTriggerEnter(Collider other)
     {
-
         if (isInvalid) {
+            // play incorrect sound...
+
             return;
         }
 
@@ -15,9 +16,7 @@ public class Ball_Tutorial : Ball {
 
         if (tag.Equals("Goal"))
         {
-            print("Ball has hit goal!");
-
-            print("Current state is: " + TutorialManager.Instance.CurrentState);
+            m_transform.position = startPosition;
 
             switch (TutorialManager.Instance.CurrentState) {
                 case TutorialManager.TutorialState.Grabbing:
@@ -43,10 +42,10 @@ public class Ball_Tutorial : Ball {
 
     protected override void OnCollisionEnter(Collision collision)
     {
-        base.OnCollisionEnter(collision);
         if (collision.gameObject.tag.Equals("Ground"))
         {
-            LevelManager.Instance.PlayIncorrectSound();
+            TutorialManager.Instance.PlayIncorrectSound();
+            m_transform.position = startPosition;
         }
     }
 }

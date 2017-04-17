@@ -28,23 +28,23 @@ public class ControllerObjectMenu : MonoBehaviour {
 
     private void Awake()
     {
-        m_input_manager = GetComponent<ControllerInputManager>();
+        m_input_manager = GetComponentInParent<ControllerInputManager>();
     }
 
     private void OnEnable()
     {
-        m_input_manager.TouchPadTouchDown += new InputEventHandler(HandleTouchDown);
-        m_input_manager.TouchPadTouchUp += new InputEventHandler(HandleTouchUp);
-        m_input_manager.TouchPadPressDown += new InputEventHandler(HandleTouchPress);
-        m_input_manager.TriggerDown += new InputEventHandler(HandleTriggerDown);
+        m_input_manager.TouchpadTouched += new InputEventHandler(HandleTouchDown);
+        m_input_manager.TouchpadUnpressed += new InputEventHandler(HandleTouchUp);
+        m_input_manager.TouchpadPressed += new InputEventHandler(HandleTouchPress);
+        m_input_manager.TriggerPressed += new InputEventHandler(HandleTriggerDown);
     }
 
     private void OnDisable()
     {
-        m_input_manager.TouchPadTouchDown -= new InputEventHandler(HandleTouchDown);
-        m_input_manager.TouchPadTouchUp -= new InputEventHandler(HandleTouchUp);
-        m_input_manager.TouchPadPressDown -= new InputEventHandler(HandleTouchPress);
-        m_input_manager.TriggerDown -= new InputEventHandler(HandleTriggerDown);
+        m_input_manager.TouchpadTouched -= new InputEventHandler(HandleTouchDown);
+        m_input_manager.TouchpadUnpressed -= new InputEventHandler(HandleTouchUp);
+        m_input_manager.TouchpadPressed -= new InputEventHandler(HandleTouchPress);
+        m_input_manager.TriggerPressed -= new InputEventHandler(HandleTriggerDown);
     }
 
     private void Start()
@@ -80,8 +80,13 @@ public class ControllerObjectMenu : MonoBehaviour {
     }
 
     private void HandleTouchDown(InputEventArgs e) {
+        // we only want it active on the right controller
+        if (e.type != ControllerType.Left)
+        {
+            return;
+        }
+
         // we only want to activate the menu when the user is touching the left or right sides of the touchpad
-        // print("Touchpad being touched at: (" + e.padX + " ," + e.padY + ").");
 
         if (e.padX > 0.7 || e.padX < -0.7)
         {
@@ -91,11 +96,22 @@ public class ControllerObjectMenu : MonoBehaviour {
     }
 
     private void HandleTouchUp(InputEventArgs e) {
+        // we only want it active on the right controller
+        if (e.type != ControllerType.Left)
+        {
+            return;
+        }
+
         objectMenuUI.SetActive(false);
         isMenuActive = false;
     }
 
     private void HandleTouchPress(InputEventArgs e) {
+        // we only want it active on the right controller
+        if (e.type != ControllerType.Right)
+        {
+            return;
+        }
         // pad pressed right
         if (e.padX > 0.7)
         {
@@ -109,6 +125,12 @@ public class ControllerObjectMenu : MonoBehaviour {
 
     private void HandleTriggerDown(InputEventArgs e)
     {
+        // we only want it active on the left controller
+        if (e.type != ControllerType.Right)
+        {
+            return;
+        }
+
         if (isMenuActive) {
             // Debug.Log("Should spawn object!");
             SpawnCurrentMenuObject();

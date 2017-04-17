@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Portal_Solution : MonoBehaviour {
+public class Portal : MonoBehaviour {
 
-    public Transform portalEntrance;
-    public Transform portalExit;
+    public GameObject portalEntrancePrefab;
+    public GameObject portalExitPrefab;
     public Material lineMaterial;
     public Transform ball;
     public float portalExitForce = 2.0f;
@@ -18,36 +18,42 @@ public class Portal_Solution : MonoBehaviour {
 
     private void Awake()
     {
+        // We create the child game objects, which are the two portal gates
+        // We do this in code because it fixes a lot of bugs, and it allows
+        // the user to change the model used for the portal gates.
+
         m_transform = GetComponent<Transform>();
+        m_transform.rotation = Quaternion.Euler(0f, -90f, 0f);
 
-        // set parents
-        portalEntrance.SetParent(m_transform);
-        portalExit.SetParent(m_transform);
+        // create the portals
+        GameObject entrance = Instantiate(portalEntrancePrefab, transform);
+        // entrance.transform.SetParent(transform);
+        entrance.transform.localPosition = new Vector3(0f, 0f, 0.4f);
+        entrance.transform.localRotation = Quaternion.identity;
 
+        GameObject exit = Instantiate(portalExitPrefab, transform);
+        // exit.transform.SetParent(transform);
+        exit.transform.localPosition = new Vector3(0f, 0f, -0.4f);
+        exit.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
+
+        portalIn = entrance.transform;
+        portalOut = exit.transform;
+    }
+
+    private void Start()
+    {
+        // Find the ball
         ball = GameObject.Find("Ball").transform;
-
-        portalIn = portalEntrance;
-        portalOut = portalExit;
-
+        
         // create the line
         lineRenderer = this.gameObject.AddComponent<LineRenderer>();
-        lineRenderer.numPositions = 2;
+        lineRenderer.positionCount = 2;
         lineRenderer.startWidth = 0.5f;
         lineRenderer.endWidth = 0.5f;
         lineRenderer.material = lineMaterial;
 
         lineRenderer.SetPosition(0, portalIn.position);
         lineRenderer.SetPosition(1, portalOut.position);
-
-
-    }
-
-    private void Start()
-    {
-        // m_transform.rotation = Quaternion.Euler(0f, -90f, 0f);
-
-        // Find the ball
-
     }
 
 

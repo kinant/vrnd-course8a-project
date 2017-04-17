@@ -4,27 +4,6 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour {
 
-    private static LevelManager _instance;
-
-    public static LevelManager Instance { get { return _instance; } }
-
-    private void Awake()
-    {
-        _instance = this;
-        /*
-        if (_instance != null && _instance != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            _instance = this;
-        }
-        */
-        currStarCount = 0;
-
-    }
-
     private int numberOfStars = 0;
     public List<GameObject> stars;
     public AudioClip correctSFX;
@@ -45,8 +24,6 @@ public class LevelManager : MonoBehaviour {
         currStarCount = 0;
         numberOfStars = stars.Count;
         didWin = false;
-
-
     }
 
     public void CollectStar() {
@@ -55,9 +32,6 @@ public class LevelManager : MonoBehaviour {
     }
 
     public void CheckWin() {
-
-        print("CHECKING IF WON! curr: " + currStarCount + ", num: " + numberOfStars);
-
         if (currStarCount == numberOfStars)
         {
             didWin = true;
@@ -69,7 +43,6 @@ public class LevelManager : MonoBehaviour {
     }
 
     private void Win() {
-        print("LEVEL COMPLETE! ALL STARS COLLECTED!");
         audioSource.PlayOneShot(correctSFX);
         levelLoader.Trigger();
     }
@@ -93,5 +66,4 @@ public class LevelManager : MonoBehaviour {
             audioSource.PlayOneShot(incorrectSFX);
         }
     }
-
 }

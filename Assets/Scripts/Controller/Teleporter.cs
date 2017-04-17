@@ -29,24 +29,29 @@ public class Teleporter : MonoBehaviour {
 
     private void Awake()
     {
-        m_input_manager = GetComponent<ControllerInputManager>();
+        m_input_manager = GetComponentInParent<ControllerInputManager>();
     }
 
     private void OnEnable()
     {
-        m_input_manager.TouchPadPressDown += new InputEventHandler (ActivateTeleporter);
-        m_input_manager.TouchPadPressUp += new InputEventHandler(DeactivateTeleporter);
+        m_input_manager.TouchpadPressed += new InputEventHandler (ActivateTeleporter);
+        m_input_manager.TouchpadUnpressed += new InputEventHandler(DeactivateTeleporter);
     }
 
     private void OnDisable()
     {
-        m_input_manager.TouchPadPressDown -= new InputEventHandler(ActivateTeleporter);
-        m_input_manager.TouchPadPressUp -= new InputEventHandler(DeactivateTeleporter);
+        m_input_manager.TouchpadPressed -= new InputEventHandler(ActivateTeleporter);
+        m_input_manager.TouchpadUnpressed -= new InputEventHandler(DeactivateTeleporter);
     }
 
     // Event Handlers...
     private void ActivateTeleporter(InputEventArgs e)
     {
+        // we only want it active on the left controller
+        if (e.type != ControllerType.Left) {
+            return;
+        }
+
         Debug.Log("should activate teleporter!");
         // activate
         if (pointer != null)
@@ -63,6 +68,12 @@ public class Teleporter : MonoBehaviour {
 
     private void DeactivateTeleporter(InputEventArgs e)
     {
+        // we only want it active on the left controller
+        if (e.type != ControllerType.Left)
+        {
+            return;
+        }
+
         if (isCurrContact)
         {
             // teleport to the location
