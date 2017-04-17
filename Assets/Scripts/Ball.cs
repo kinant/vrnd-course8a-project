@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BallReset : MonoBehaviour {
+public class Ball : MonoBehaviour {
 
     private Vector3 startPosition;
     private Transform m_transform;
@@ -68,6 +68,9 @@ public class BallReset : MonoBehaviour {
                 // Player has exited the play area with the ball, invalidate the ball
                 renderer.material.color = Color.black;
                 isInvalid = true;
+
+                // play sound
+                LevelManager.Instance.PlayIncorrectSound();
             }
         }
     }

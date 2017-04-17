@@ -67,4 +67,9 @@ public class LevelManager : MonoBehaviour {
 
         currStarCount = 0;
     }
+
+    public void PlayIncorrectSound() {
+        audioSource.PlayOneShot(incorrectSFX);
+    }
+
 }

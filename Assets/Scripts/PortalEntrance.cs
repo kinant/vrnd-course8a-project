@@ -22,10 +22,10 @@ public class PortalEntrance : MonoBehaviour {
     {
         Debug.Log("Ball has entered!");
         // this is the ball...set being held flag
-        if (other.gameObject.GetComponent<BallReset>())
+        if (other.gameObject.GetComponent<Ball>())
         {
             // check if ball is being held
-            if (other.gameObject.GetComponent<BallReset>().isBeingHeld) {
+            if (other.gameObject.GetComponent<Ball>().isBeingHeld) {
                 return;
             }
 

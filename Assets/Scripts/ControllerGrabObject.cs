@@ -104,9 +104,9 @@ public class ControllerGrabObject : MonoBehaviour
         objectInHand.transform.SetParent(transform);
 
         // this is the ball...set being held flag
-        if (objectInHand.GetComponent<BallReset>())
+        if (objectInHand.GetComponent<Ball>())
         {
-            objectInHand.GetComponent<BallReset>().isBeingHeld = true;
+            objectInHand.GetComponent<Ball>().isBeingHeld = true;
         }
 
         collidingObject = null;
@@ -118,9 +118,9 @@ public class ControllerGrabObject : MonoBehaviour
     private void ReleaseObject(Vector3 velocity, Vector3 angularVelocity, bool isKinematic)
     {
         // this is the ball...set being held flag
-        if (objectInHand.GetComponent<BallReset>())
+        if (objectInHand.GetComponent<Ball>())
         {
-            objectInHand.GetComponent<BallReset>().isBeingHeld = false;
+            objectInHand.GetComponent<Ball>().isBeingHeld = false;
         }
 
         // turn the colliders back on
