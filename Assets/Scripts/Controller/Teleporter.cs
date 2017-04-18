@@ -127,7 +127,7 @@ public class Teleporter : MonoBehaviour {
             pointerIndicatorMeshRenderer = pointerIndicator.GetComponent<MeshRenderer>();
 
             // we initially do not want to see the indicator, so we disable its renderer
-            pointerIndicatorMeshRenderer.enabled = false;]
+            pointerIndicatorMeshRenderer.enabled = false;
 
             // cache the transform
             pointerIndicatorTransform = pointerIndicator.transform;
