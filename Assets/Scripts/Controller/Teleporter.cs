@@ -1,48 +1,55 @@
 ﻿using UnityEngine;
 
+// this class is used to allow the player to teleport anywhere on the ground
+// I used the SteamVR_LaserPointer script as a reference. 
 public class Teleporter : MonoBehaviour {
 
-    public Color color;
-    public float thickness = 0.002f;
-    public Transform player;
-    public GameObject pointerIndicatorPrefab;
-    public LayerMask layerMask;
+    public Color color; // laser pointer color
+    public float thickness = 0.002f; // laser pointer thickness
+    public Transform player; // reference to player position
+    public GameObject pointerIndicatorPrefab; // prefab for indicator that shows when there is a valid teleport destination
+    public LayerMask layerMask; // layermask for raycast
 
-    private GameObject pointer;
-    private GameObject holder;
+    private GameObject pointer; // the laserpointer
+    private GameObject holder; // the laserpointer holder
 
-    private bool isActive = false;
+    private bool isActive = false; // flag to tell if the laser pointer is active or not
 
-    private GameObject pointerIndicator;
-    private MeshRenderer pointerIndicatorMeshRenderer;
-    private Transform pointerTransform;
-    private Transform pointerIndicatorTransform;
+    private GameObject pointerIndicator; // reference to the pointer indicator
+    private MeshRenderer pointerIndicatorMeshRenderer; // cached reference to the pointer indicator mesh renderer
 
-    private Transform currContact = null;
-    private bool isCurrContact = false;
+    private Transform pointerTransform; // cached reference to the laser pointers transform
+    private Transform pointerIndicatorTransform; // cached reference to the laser pointers' indicator transform
 
-    private ControllerInputManager m_input_manager;
+    private Transform currContact = null; // cache for the transform of any current contact (by the raycast)
+    private bool isCurrContact = false; // flag to tell if we currenty have a contact
 
-    private Transform m_transform;
+    private ControllerInputManager m_input_manager; // reference to the controller input manager
+
+    private Transform m_transform; // reference for the controllers transform
 
     private void Awake()
     {
+        // get the controller input manager
         m_input_manager = GetComponentInParent<ControllerInputManager>();
     }
 
     private void OnEnable()
     {
+        // subscribe to controller events
         m_input_manager.TouchpadPressed += new InputEventHandler (ActivateTeleporter);
         m_input_manager.TouchpadUnpressed += new InputEventHandler(DeactivateTeleporter);
     }
 
     private void OnDisable()
     {
+        // unsubscribe to controller events
         m_input_manager.TouchpadPressed -= new InputEventHandler(ActivateTeleporter);
         m_input_manager.TouchpadUnpressed -= new InputEventHandler(DeactivateTeleporter);
     }
 
     // Event Handlers...
+    // We activate the teleporter when the touchpad is pressed
     private void ActivateTeleporter(InputEventArgs e)
     {
         // we only want it active on the left controller
@@ -56,6 +63,7 @@ public class Teleporter : MonoBehaviour {
             pointer.SetActive(true);
             isActive = true;
 
+            // activate the indicator if we had a current contact before
             if (currContact != null)
             {
                 EnablePointerIndicator();
@@ -63,6 +71,7 @@ public class Teleporter : MonoBehaviour {
         }
     }
 
+    // We deactivate the teleporter when the touchpad is released
     private void DeactivateTeleporter(InputEventArgs e)
     {
         // we only want it active on the left controller
@@ -71,6 +80,7 @@ public class Teleporter : MonoBehaviour {
             return;
         }
 
+        // before we deactivate, we will teleport the player, but only if there is a current contact
         if (isCurrContact)
         {
             // teleport to the location
@@ -92,11 +102,13 @@ public class Teleporter : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        // create the laser pointer holder
         holder = new GameObject();
         holder.transform.parent = this.transform;
         holder.transform.localPosition = Vector3.zero;
         holder.transform.localRotation = Quaternion.identity;
 
+        // create the laser pointer
         pointer = GameObject.CreatePrimitive(PrimitiveType.Cube);
         pointer.name = "Pointer";
         pointer.transform.parent = holder.transform;
@@ -108,18 +120,26 @@ public class Teleporter : MonoBehaviour {
         newMaterial.SetColor("_Color", color);
         pointer.GetComponent<MeshRenderer>().material = newMaterial;
 
+        // check if we have a prefab for the pointer indicator, if so, we create it
         if (pointerIndicatorPrefab != null)
         {
             pointerIndicator = GameObject.Instantiate(pointerIndicatorPrefab);
             pointerIndicatorMeshRenderer = pointerIndicator.GetComponent<MeshRenderer>();
-            pointerIndicatorMeshRenderer.enabled = false;
+
+            // we initially do not want to see the indicator, so we disable its renderer
+            pointerIndicatorMeshRenderer.enabled = false;]
+
+            // cache the transform
             pointerIndicatorTransform = pointerIndicator.transform;
         }
 
+        // cache pointer transform
         pointerTransform = pointer.transform;
 
+        // cache controller transform
         m_transform = GetComponent<Transform>();
 
+        // if the pointer has any sort of collider, we want to remove it
         BoxCollider collider = pointer.GetComponent<BoxCollider>();
 
         if (collider)
@@ -136,45 +156,60 @@ public class Teleporter : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        // if the laser pointer is not active, do nothing
         if (!isActive)
         {
             return;
         }
 
-        float dist = 100f;
-        float thick = thickness;
+        float dist = 100f; // laser pointer distance
+        float thick = thickness; // laser pointer thickness
 
+        // we create a ray, and we use physics raycast to detect any contact with the laser pointer and the floor, which
+        // is defined by the layermask
         Ray raycast = new Ray(m_transform.position, m_transform.forward);
         RaycastHit hit;
+
         bool bHit = Physics.Raycast(raycast, out hit, 100f, layerMask);
 
+        // if we had any sort of hit
         if (bHit)
         {
+            // cache the hit transform
             Transform hitTransform = hit.transform;
 
             // handle new hit...
+            // we check that we have no current contact, and that any previous contact is not the same
             if (currContact == null || (currContact != hitTransform))
             {
+                // set the new current contact
                 currContact = hitTransform;
                 isCurrContact = true;
+
+                // we enable the indicator
                 EnablePointerIndicator();
             }
 
             // handle hitting the same object...
             if (currContact != null && currContact == hitTransform)
             {
+                // if we are hitting the same game object, then we only move the indicator positon
                 if (pointerIndicatorTransform != null)
                 {
                     pointerIndicatorTransform.position = hit.point;
                 }
             }
+
+            // if the hits distance is less than 100f, we will shorten the laser pointer
             if (hit.distance < 100f)
             {
                 dist = hit.distance;
             }
         }
+        // if there was NO hit
         else
         {
+            // if we used to have a current contact (not null), then we null it and disable the pointer indicator
             if (currContact != null)
             {
                 isCurrContact = false;
@@ -183,10 +218,12 @@ public class Teleporter : MonoBehaviour {
             }
         }
 
+        // set the pointers new thickness and length
         pointer.transform.localScale = new Vector3(thick, thick, dist);
         pointer.transform.localPosition = new Vector3(0f, 0f, dist / 2f);
     }
 
+    // this function is used to hide the pointer indicator
     private void DisablePointerIndicator()
     {
         if (pointerIndicatorMeshRenderer != null)
@@ -195,6 +232,7 @@ public class Teleporter : MonoBehaviour {
         }
     }
 
+    // this function is used to show the pointer indicator
     private void EnablePointerIndicator()
     {
         if (pointerIndicatorMeshRenderer != null)

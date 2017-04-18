@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 
+// this class is used to manage the tutorial scene
 public class TutorialManager : MonoBehaviour {
 
+    // singleton
     private static TutorialManager _instance;
 
     public static TutorialManager Instance { get { return _instance; } }
@@ -18,8 +20,9 @@ public class TutorialManager : MonoBehaviour {
         }
     }
 
-    public GameObject player;
+    public GameObject player; // reference to the player
 
+    // reference to the tutorial stages (they are all in the same scene)
     public GameObject Tutorial1_Stage;
     public GameObject Tutorial2_Stage;
     public GameObject Tutorial3_Stage;
@@ -27,23 +30,28 @@ public class TutorialManager : MonoBehaviour {
     public GameObject Tutorial5_Stage;
     public GameObject Tutorial6_Stage;
 
+    // for the tutorial, initally all scripts will be disabled (except for the teleporter)
+    // as the player progresses, the scripts will be activated, therefore, we need references to them
     public Teleporter teleportScript;
     public ControllerGrabObject grabScriptL;
     public ControllerGrabObject grabScriptR;
     public PlayerElevator elevatorScript;
     public ControllerObjectMenu menuScript;
 
+    // sounds for success and failure
     public AudioClip correctSFX;
     public AudioClip incorrectSFX;
 
-    private SteamVR_LoadLevel levelLoader;
-    private Vector3 playerStartPos;
-    private AudioSource audioSource;
+    private SteamVR_LoadLevel levelLoader; // reference to the SteamVR_LevelLoader component/script
+    private Vector3 playerStartPos; // the players start position
+    private AudioSource audioSource; // reference to the audiosource component
 
+    // all the different states during the tutorial
     public enum TutorialState {
         Teleport, Elevate, Grabbing, Spawning, Spawn_WoodPlank, Spawn_Funnel, Spawn_Portal, Complete
     }
 
+    // the current state we are in
     private TutorialState currTutState = TutorialState.Teleport;
 
     // Use this for initialization
@@ -68,11 +76,16 @@ public class TutorialManager : MonoBehaviour {
         audioSource = GetComponent<AudioSource>();
 	}
 
+    // this function sets the next state for our state machine
     public void SetState(TutorialState newState) {
+
+        // set the new current state
         currTutState = newState;
 
+        // play success sound, we have made progress
         audioSource.PlayOneShot(correctSFX);
 
+        // then we enable the next stages of the tutorial based on the current state
         switch (currTutState)
         {
             case TutorialState.Elevate:
@@ -117,10 +130,12 @@ public class TutorialManager : MonoBehaviour {
         }
     }
 
+    // used by other scripts to get the current state
     public TutorialState CurrentState {
         get { return currTutState; }
     }
 
+    // used by other scripts to play failure sound
     public void PlayIncorrectSound()
     {
         audioSource.PlayOneShot(incorrectSFX);
