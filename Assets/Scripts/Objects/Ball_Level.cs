@@ -33,7 +33,7 @@ public class Ball_Level : Ball {
     {
         base.OnTriggerExit(other);
 
-        if (other.gameObject.tag.Equals("PlayArea")) {
+        if (other.gameObject.tag.Equals("PlayArea") && isBeingHeld) {
             levelManager.PlayIncorrectSound();
         }
     }

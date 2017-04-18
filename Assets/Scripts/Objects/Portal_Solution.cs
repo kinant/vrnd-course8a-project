@@ -13,8 +13,6 @@ public class Portal_Solution : Portal {
         portalEntrance.SetParent(m_transform);
         portalExit.SetParent(m_transform);
 
-        ball = GameObject.Find("Ball").transform;
-
         portalIn = portalEntrance;
         portalOut = portalExit;
 

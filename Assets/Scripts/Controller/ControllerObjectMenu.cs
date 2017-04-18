@@ -31,7 +31,7 @@ public class ControllerObjectMenu : MonoBehaviour {
     private void OnEnable()
     {
         m_input_manager.TouchpadTouched += new InputEventHandler(HandleTouchDown);
-        m_input_manager.TouchpadUnpressed += new InputEventHandler(HandleTouchUp);
+        m_input_manager.TouchpadUntouched += new InputEventHandler(HandleTouchUp);
         m_input_manager.TouchpadPressed += new InputEventHandler(HandleTouchPress);
         m_input_manager.TriggerPressed += new InputEventHandler(HandleTriggerDown);
     }
@@ -63,7 +63,7 @@ public class ControllerObjectMenu : MonoBehaviour {
 
     private void HandleTouchDown(InputEventArgs e) {
         // we only want it active on the right controller
-        if (e.type != ControllerType.Left)
+        if (e.type != ControllerType.Right)
         {
             return;
         }
@@ -78,7 +78,7 @@ public class ControllerObjectMenu : MonoBehaviour {
 
     private void HandleTouchUp(InputEventArgs e) {
         // we only want it active on the right controller
-        if (e.type != ControllerType.Left)
+        if (e.type != ControllerType.Right)
         {
             return;
         }

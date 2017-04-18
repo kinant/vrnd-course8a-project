@@ -51,7 +51,7 @@ public class Portal : MonoBehaviour {
     private void Start()
     {
         // Find the ball
-        ball = GameObject.Find("Ball").transform;
+        ball = GameObject.FindWithTag("Throwable").transform;
     }
 
     public void BallEnteredPortal() {

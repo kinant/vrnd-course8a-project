@@ -5,22 +5,23 @@ public class Ball_Tutorial : Ball {
     protected override void ResetBall()
     {
         base.ResetBall();
-
-        TutorialManager.Instance.PlayIncorrectSound();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (isInvalid) {
-            // play incorrect sound...
-            TutorialManager.Instance.PlayIncorrectSound();
-            return;
-        }
-
         string tag = other.gameObject.tag;
 
         if (tag.Equals("Goal"))
         {
+            if (isInvalid)
+            {
+                // play incorrect sound...
+                TutorialManager.Instance.PlayIncorrectSound();
+                return;
+            }
+
+            ResetBall();
+
             switch (TutorialManager.Instance.CurrentState) {
                 case TutorialManager.TutorialState.Grabbing:
                     TutorialManager.Instance.SetState(TutorialManager.TutorialState.Spawning);
@@ -47,7 +48,17 @@ public class Ball_Tutorial : Ball {
     {
         base.OnTriggerExit(other);
 
-        if (other.gameObject.tag.Equals("PlayArea"))
+        if (other.gameObject.tag.Equals("PlayArea") && isBeingHeld)
+        {
+            TutorialManager.Instance.PlayIncorrectSound();
+        }
+    }
+
+    protected override void OnCollisionEnter(Collision collision)
+    {
+        base.OnCollisionEnter(collision);
+
+        if (collision.gameObject.tag.Equals("Ground"))
         {
             TutorialManager.Instance.PlayIncorrectSound();
         }
