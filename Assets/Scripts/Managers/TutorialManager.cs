@@ -29,6 +29,7 @@ public class TutorialManager : MonoBehaviour {
     public GameObject Tutorial4_Stage;
     public GameObject Tutorial5_Stage;
     public GameObject Tutorial6_Stage;
+    public GameObject Tutorial7_Stage;
 
     // for the tutorial, initally all scripts will be disabled (except for the teleporter)
     // as the player progresses, the scripts will be activated, therefore, we need references to them
@@ -48,7 +49,7 @@ public class TutorialManager : MonoBehaviour {
 
     // all the different states during the tutorial
     public enum TutorialState {
-        Teleport, Elevate, Grabbing, Spawning, Spawn_WoodPlank, Spawn_Funnel, Spawn_Portal, Complete
+        Teleport, Elevate, Grabbing, Spawn_MetalPlank, Spawn_WoodPlank, Spawn_Funnel, Spawn_Trampoline, Spawn_Portal, Complete
     }
 
     // the current state we are in
@@ -98,7 +99,7 @@ public class TutorialManager : MonoBehaviour {
                 grabScriptL.enabled = true;
                 grabScriptR.enabled = true;
                 break;
-            case TutorialState.Spawning:
+            case TutorialState.Spawn_MetalPlank:
                 Tutorial2_Stage.SetActive(false);
                 Tutorial3_Stage.SetActive(true);
                 player.transform.position = playerStartPos;
@@ -116,11 +117,17 @@ public class TutorialManager : MonoBehaviour {
                 player.transform.position = playerStartPos;
                 menuScript.objects[2].count = 1;
                 break;
-            case TutorialState.Spawn_Portal:
+            case TutorialState.Spawn_Trampoline:
                 Tutorial5_Stage.SetActive(false);
                 Tutorial6_Stage.SetActive(true);
                 player.transform.position = playerStartPos;
                 menuScript.objects[3].count = 1;
+                break;
+            case TutorialState.Spawn_Portal:
+                Tutorial6_Stage.SetActive(false);
+                Tutorial7_Stage.SetActive(true);
+                player.transform.position = playerStartPos;
+                menuScript.objects[4].count = 1;
                 break;
             case TutorialState.Complete:
                 levelLoader.Trigger();

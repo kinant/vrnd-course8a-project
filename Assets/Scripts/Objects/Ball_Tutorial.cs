@@ -25,15 +25,18 @@ public class Ball_Tutorial : Ball {
             // we check what state we are currently in, and then set the appropiate next state
             switch (TutorialManager.Instance.CurrentState) {
                 case TutorialManager.TutorialState.Grabbing:
-                    TutorialManager.Instance.SetState(TutorialManager.TutorialState.Spawning);
+                    TutorialManager.Instance.SetState(TutorialManager.TutorialState.Spawn_MetalPlank);
                     break;
-                case TutorialManager.TutorialState.Spawning:
+                case TutorialManager.TutorialState.Spawn_MetalPlank:
                     TutorialManager.Instance.SetState(TutorialManager.TutorialState.Spawn_WoodPlank);
                     break;
                 case TutorialManager.TutorialState.Spawn_WoodPlank:
                     TutorialManager.Instance.SetState(TutorialManager.TutorialState.Spawn_Funnel);
                     break;
                 case TutorialManager.TutorialState.Spawn_Funnel:
+                    TutorialManager.Instance.SetState(TutorialManager.TutorialState.Spawn_Trampoline);
+                    break;
+                case TutorialManager.TutorialState.Spawn_Trampoline:
                     TutorialManager.Instance.SetState(TutorialManager.TutorialState.Spawn_Portal);
                     break;
                 case TutorialManager.TutorialState.Spawn_Portal:
