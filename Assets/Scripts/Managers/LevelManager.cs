@@ -9,6 +9,8 @@ public class LevelManager : MonoBehaviour {
     public AudioClip correctSFX; // sound to play for success
     public AudioClip incorrectSFX; // sound to play for any failure
     public AudioClip starCollectSFX; // sound to play if the star is collected
+    public GameObject solution;
+    public bool showSolution = false;
 
     private int numberOfStars = 0; // the total number of stars in the scene to be collected
     private int currStarCount = 0; // the count of the current number of stars collected
@@ -31,6 +33,9 @@ public class LevelManager : MonoBehaviour {
 
         // make sure we have not won yet
         didWin = false;
+
+        // show the solution?
+        solution.SetActive(showSolution);
     }
 
     // this function is called by the Ball when a star is collected
