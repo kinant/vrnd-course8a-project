@@ -23,7 +23,7 @@ public class Portal_Solution : Portal {
 
         // create the line
         lineRenderer = this.gameObject.AddComponent<LineRenderer>();
-        lineRenderer.positionCount = 2;
+        lineRenderer.numPositions = 2;
         lineRenderer.startWidth = 0.5f;
         lineRenderer.endWidth = 0.5f;
         lineRenderer.material = lineMaterial;

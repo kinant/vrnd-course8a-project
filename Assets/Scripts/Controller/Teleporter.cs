@@ -167,7 +167,7 @@ public class Teleporter : MonoBehaviour {
 
         // we create a ray, and we use physics raycast to detect any contact with the laser pointer and the floor, which
         // is defined by the layermask
-        Ray raycast = new Ray(m_transform.position, m_transform.forward);
+        Ray raycast = new Ray(transform.position, transform.forward);
         RaycastHit hit;
 
         bool bHit = Physics.Raycast(raycast, out hit, 100f, layerMask);
