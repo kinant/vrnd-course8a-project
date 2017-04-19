@@ -64,7 +64,7 @@ public class ControllerObjectMenu : MonoBehaviour {
         SetUIText(objects[currMenuIndex].name, objects[currMenuIndex].count);
 
         // make sure the object menu spawns a little forward of the controller
-        objectMenuUI.transform.localPosition = new Vector3(0f, 0f, 0.5f);
+        objectMenuUI.transform.localPosition = new Vector3(0f, 0f, 0.65f);
     }
 
     // handle the controller's touchpad being touched

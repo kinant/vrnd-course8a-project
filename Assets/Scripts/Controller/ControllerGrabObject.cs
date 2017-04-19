@@ -40,8 +40,8 @@ public class ControllerGrabObject : MonoBehaviour
             return;
         }
 
-        // check that we can only grab the ball, the structures and the funnel (special case)
-        if(collidingObject.tag.Equals("Throwable") || collidingObject.tag.Equals("Structure") || collidingObject.tag.Equals("Funnel"))
+        // check that we can only grab the ball, the structures and the funnel or trampoline (special cases)
+        if(collidingObject.tag.Equals("Throwable") || collidingObject.tag.Equals("Structure") || collidingObject.tag.Equals("Funnel") || collidingObject.tag.Equals("Trampoline"))
         {
             // proceed to grab the object
             GrabObject();
@@ -64,7 +64,7 @@ public class ControllerGrabObject : MonoBehaviour
             // Release the object and apply velocities
             ReleaseObject(e.controller.velocity, e.controller.angularVelocity, false);
         }
-        else if (objectInHand.tag.Equals("Structure") || objectInHand.tag.Equals("Funnel")) {
+        else if (objectInHand.tag.Equals("Structure") || objectInHand.tag.Equals("Funnel") || objectInHand.tag.Equals("Trampoline")) {
 
             // Release the object but do not add any velocities to it
             ReleaseObject(Vector3.zero, Vector3.zero, true);
@@ -112,9 +112,9 @@ public class ControllerGrabObject : MonoBehaviour
         // once we know we can grab an object, it is assigned as the object in hand
         objectInHand = collidingObject;
 
-        // if it is tagged as a funnel, we have a special case
-        // the funnels collider is on a child, so we want to attach the parent
-        if (objectInHand.tag.Equals("Funnel")) {
+        // if it is tagged as a funnel or trampoline, we have a special case
+        // these have the collider inn a child, so we want to attach the parent
+        if (objectInHand.tag.Equals("Funnel") || objectInHand.tag.Equals("Trampoline")) {
             objectInHand = objectInHand.transform.parent.gameObject;
         }
 
