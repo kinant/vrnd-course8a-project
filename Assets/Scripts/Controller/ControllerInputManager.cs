@@ -40,6 +40,7 @@ public class ControllerInputManager : MonoBehaviour
     // utility function to get the controller type
     private ControllerType GetControllerType(SteamVR_Controller.Device d)
     {
+
         // check if it is the left controller
         if (d == controllerL_device)
         {
@@ -109,6 +110,15 @@ public class ControllerInputManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (controllerL_trackedObj == null || controllerR_trackedObj == null) {
+            return;
+        }
+
+        if (controllerL_device == null || controllerR_device == null)
+        {
+            return;
+        }
+
         // we check for input from both devices
         if (controllerL_device != null)
         {

@@ -75,6 +75,9 @@ public class ControllerObjectMenu : MonoBehaviour {
             return;
         }
 
+        // update text
+        SetUIText(objects[currMenuIndex].name, objects[currMenuIndex].count);
+
         // we only want to activate the menu when the user is touching the left or right sides of the touchpad
         if (e.padX > 0.5 || e.padX < -0.5)
         {

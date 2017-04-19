@@ -9,6 +9,7 @@ public class Teleporter : MonoBehaviour {
     public Transform player; // reference to player position
     public GameObject pointerIndicatorPrefab; // prefab for indicator that shows when there is a valid teleport destination
     public LayerMask layerMask; // layermask for raycast
+    public Material laserPointerMaterial;
 
     private GameObject pointer; // the laserpointer
     private GameObject holder; // the laserpointer holder
@@ -116,9 +117,9 @@ public class Teleporter : MonoBehaviour {
         pointer.transform.localPosition = new Vector3(0f, 0f, 50f);
         pointer.transform.localRotation = Quaternion.identity;
 
-        Material newMaterial = new Material(Shader.Find("Unlit/Color"));
-        newMaterial.SetColor("_Color", color);
-        pointer.GetComponent<MeshRenderer>().material = newMaterial;
+        // Material newMaterial = new Material(Shader.Find("Unlit/Color"));
+        // newMaterial.SetColor("_Color", color);
+        pointer.GetComponent<MeshRenderer>().material = laserPointerMaterial;
 
         // check if we have a prefab for the pointer indicator, if so, we create it
         if (pointerIndicatorPrefab != null)
@@ -167,6 +168,9 @@ public class Teleporter : MonoBehaviour {
 
         // we create a ray, and we use physics raycast to detect any contact with the laser pointer and the floor, which
         // is defined by the layermask
+
+        // Debug.Log("transform: " + transform.position + ", fwd:" + transform.forward);
+
         Ray raycast = new Ray(transform.position, transform.forward);
         RaycastHit hit;
 
